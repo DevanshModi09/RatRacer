@@ -36,7 +36,9 @@ io.on('connection', (socket: CustomSocket) => {
 
     io.emit('user-joined', `${name} has joined the website`);
   });
-
+  socket.on('msg-receive', (msg) => {
+    io.emit('showmsg', `${msg}`);
+  });
   socket.on('disconnect', () => {
     console.log(`${socket.username} disconnected`);
 
