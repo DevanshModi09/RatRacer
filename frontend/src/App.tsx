@@ -26,7 +26,7 @@ const App = () => {
   };
   const handleReady = () => {
     setIsReady((isReady) => !isReady);
-    socket.emit('player-ready', `${roomCode}`, isReady);
+    socket.emit('player-ready', `${roomCode}`, !isReady);
   };
   if (room) {
     return (
