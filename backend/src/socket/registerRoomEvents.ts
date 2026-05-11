@@ -22,11 +22,29 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
     };
     rooms.set(roomCode, room);
     socket.join(roomCode);
-       socket.emit('room_created', room);
+    socket.emit('room_created', room);
   });
 
   io.on(
     'join-room',
-    ({ roomCode, username }: { roomCode: string; username: string }) => {},
+    ({ roomCode, username }: { roomCode: string; username: string }) => {
+      const room = rooms.get(roomCode);
+      if (!room) {
+        socket.emit('error_message', 'Room not found');
+
+        return;
+      }
+      const player: Player = {
+        username,
+        ready: false,
+        finished: false,
+        wpm: 0,
+        progress: 0,
+        socketId: socket.id,
+      };
+      room.players.push(player);
+      socket.join(roomCode);
+      io.to(roomCode).emit('room_updated', room);
+    },
   );
 };
