@@ -4,7 +4,7 @@ import { socket } from './utils/socket';
 const App = () => {
   const [username, setUsername] = useState('');
   const [roomCode, setRoomCode] = useState('');
-//   const [isInsideRoom, setInsideRoom] = useState(false);
+  //   const [isInsideRoom, setInsideRoom] = useState(false);
   const [room, setRoom] = useState(null);
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
@@ -25,7 +25,7 @@ const App = () => {
     socket.emit('join-room', { roomCode, username });
   };
   const handleReady = () => {
-    setIsReady(!isReady);
+    setIsReady((isReady) => !isReady);
     socket.emit('player-ready', `${roomCode}`, isReady);
   };
   if (room) {
