@@ -4,7 +4,7 @@ import { Room, Player } from '../types/room.types.js';
 import { generateRoomCode } from '../utils/generateRoomCode.js';
 export const registerRoomEvents = (io: Server, socket: Socket) => {
   //CreateRoom
-  io.on('create-room', ({ username }: { username: string }) => {
+  socket.on('create-room', ({ username }: { username: string }) => {
     const roomCode = generateRoomCode();
     const player: Player = {
       username,
@@ -25,12 +25,17 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
     socket.emit('room_created', room);
   });
 
-  io.on(
+  socket.on(
     'join-room',
     ({ roomCode, username }: { roomCode: string; username: string }) => {
       const room = rooms.get(roomCode);
       if (!room) {
         socket.emit('error_message', 'Room not found');
+
+        return;
+      }
+      if (room.raceStarted) {
+        socket.emit('error_message', 'Race already started');
 
         return;
       }
