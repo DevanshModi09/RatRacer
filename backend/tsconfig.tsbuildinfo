@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/socket/socket.ts"],"version":"6.0.3"}
+{"root":["./src/index.ts","./src/managers/roommanager.ts","./src/socket/initorgetsocket.ts","./src/socket/registerroomevents.ts","./src/socket/sockethandler.ts","./src/types/room.types.ts","./src/utils/generateroomcode.ts"],"version":"6.0.3"}
