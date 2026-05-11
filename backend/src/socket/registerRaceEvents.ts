@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 import { rooms } from '../managers/roomManager.js';
 import { prependListener } from 'node:cluster';
 export const registerRaceEvents = (io: Server, socket: Socket) => {
-  socket.on('player-ready', (roomCode: string) => {
+  socket.on('player-ready', (roomCode: string, isReady: boolean) => {
     const room = rooms.get(roomCode);
     if (!room) {
       return;
@@ -11,8 +11,8 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
     if (!player) {
       return;
     }
-    player.ready = true;
-    io.to(roomCode).emit('room-updated', room);
+    player.ready = isReady;
+    io.to(roomCode).emit('room_updated', room);
     const isAllReady = room.players.every((p) => p.ready);
     if (isAllReady) {
       room.text =

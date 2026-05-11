@@ -11,8 +11,6 @@ const server = createServer(app);
 const io = initSocket(server);
 socketHandler(io);
 
-import { generateRoomCode } from './utils/generateRoomCode.js';
-console.log(generateRoomCode());
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log('Server is running on port : ' + port);
