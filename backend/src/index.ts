@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { initSocket } from './socket/socket.js';
+import { initSocket } from './socket/initOrGetSocket.js';
 import express, { Request, Response } from 'express';
 import { socketHandler } from './socket/socketHandler.js';
 dotenv.config();
