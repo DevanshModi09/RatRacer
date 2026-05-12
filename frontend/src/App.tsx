@@ -29,7 +29,7 @@ type OpponentStats = Record<
 
 const App = () => {
   const [username, setUsername] = useState('');
-
+  const [isRaceFinished, setRaceFinished] = useState(false);
   const [text, setText] = useState('');
 
   const [isRaceStarted, setRaceStarted] = useState(false);
@@ -215,7 +215,9 @@ const App = () => {
     };
 
     setStats(updatedStats);
-
+    if (finished) {
+      setRaceFinished(true);
+    }
     /*
       REALTIME EMIT
     */
@@ -285,19 +287,22 @@ const App = () => {
             </p>
 
             {/* INPUT */}
+            {isRaceFinished ? (
+              <input
+                type="text"
+                value={typingInput}
+                onChange={handleTyping}
+                style={{
+                  width: '100%',
 
-            <input
-              type="text"
-              value={typingInput}
-              onChange={handleTyping}
-              style={{
-                width: '100%',
+                  padding: '12px',
 
-                padding: '12px',
-
-                fontSize: '18px',
-              }}
-            />
+                  fontSize: '18px',
+                }}
+              />
+            ) : (
+              <div>Race Already Finished</div>
+            )}
 
             {/* YOUR STATS */}
 
