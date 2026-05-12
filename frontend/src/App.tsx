@@ -31,9 +31,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [isRaceFinished, setRaceFinished] = useState(false);
   const [text, setText] = useState('');
-
   const [isRaceStarted, setRaceStarted] = useState(false);
-
   const [raceCountDown, setRaceCountdown] = useState<number | null>(null);
 
   const [typingInput, setTypingInput] = useState('');
@@ -287,7 +285,7 @@ const App = () => {
             </p>
 
             {/* INPUT */}
-            {isRaceFinished ? (
+            {!isRaceFinished ? (
               <input
                 type="text"
                 value={typingInput}
