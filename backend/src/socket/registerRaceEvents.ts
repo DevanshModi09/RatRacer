@@ -47,6 +47,7 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
       player.wpm = wpm;
       player.progress = progress;
       socket.to(roomCode).emit('opponent_progress', {
+        username: player.username,
         socketId: socket.id,
         progress,
         wpm,
