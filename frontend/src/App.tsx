@@ -1,28 +1,18 @@
 import { useState, useEffect } from 'react';
-
 import { socket } from './utils/socket';
-
 type Stats = {
   correctChars: number;
-
   incorrectChars: number;
-
   progress: number;
-
   wpm: number;
-
   accuracy: number;
-
   finished: boolean;
 };
-
 type OpponentStats = Record<
   string,
   {
     username: string;
-
     progress: number;
-
     wpm: number;
   }
 >;
@@ -33,20 +23,11 @@ const App = () => {
   const [text, setText] = useState('');
   const [isRaceStarted, setRaceStarted] = useState(false);
   const [raceCountDown, setRaceCountdown] = useState<number | null>(null);
-
   const [typingInput, setTypingInput] = useState('');
-
   const [startedAt, setStartedAt] = useState<number | null>(null);
-
   const [roomCode, setRoomCode] = useState('');
-
   const [room, setRoom] = useState<any>(null);
-
   const [isReady, setIsReady] = useState(false);
-
-  /*
-    PLAYER STATS
-  */
   const [stats, setStats] = useState<Stats>({
     correctChars: 0,
 
@@ -60,15 +41,8 @@ const App = () => {
 
     finished: false,
   });
-
-  /*
-    OPPONENT STATS
-  */
   const [opponentStats, setOpponentStats] = useState<OpponentStats>({});
 
-  /*
-    SOCKET EVENTS
-  */
   useEffect(() => {
     /*
       OPPONENT PROGRESS
@@ -216,9 +190,7 @@ const App = () => {
     if (finished) {
       setRaceFinished(true);
     }
-    /*
-      REALTIME EMIT
-    */
+
     socket.emit('progress-update', {
       roomCode,
 
