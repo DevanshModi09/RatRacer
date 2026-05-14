@@ -3,9 +3,9 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { initSocket } from './socket/initOrGetSocket.js';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { socketHandler } from './socket/socketHandler.js';
-const __dirname = path.resolve();
+import authRouter from './routes/authRoutes.js';
 dotenv.config();
 const app = express();
 const server = createServer(app);
@@ -17,8 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 //Routes
-app.get('/', (req: Request, res: Response) => {});
+app.get('/api/v1/auth', authRouter);
 
+//Prod setup
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
 
