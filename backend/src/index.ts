@@ -17,8 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 //Routes
-app.get('/api/v1/auth', authRouter);
-
+app.use('/api/v1/auth', authRouter);
 //Prod setup
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
