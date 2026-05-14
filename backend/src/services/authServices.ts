@@ -20,9 +20,12 @@ class AuthServices {
     return user;
   };
   static findUserByEmail = async (email: string) => {
-    console.log(email);
     const user: User = await prisma.user.findUnique({ where: { email } });
     return user;
+  };
+  static comparePasswords = async (user: User, password) => {
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    return isPasswordCorrect;
   };
 }
 
