@@ -8,10 +8,17 @@ import { socketHandler } from './socket/socketHandler.js';
 const __dirname = path.resolve();
 dotenv.config();
 const app = express();
-app.use(cors());
 const server = createServer(app);
 const io = initSocket(server);
 socketHandler(io);
+
+//Middlewares
+app.use(cors());
+app.use(express.json());
+
+//Routes
+app.get('/', (req: Request, res: Response) => {});
+
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
 

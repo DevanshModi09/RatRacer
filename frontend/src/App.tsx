@@ -214,7 +214,6 @@ const App = () => {
       >
         <h1>Room: {roomCode}</h1>
 
-        {/* PLAYERS */}
 
         <h2>Players</h2>
 
