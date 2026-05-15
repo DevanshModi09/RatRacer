@@ -1,12 +1,15 @@
+import { initSocket } from './socket/initOrGetSocket.js';
+import { socketHandler } from './socket/socketHandler.js';
 import { createServer } from 'http';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { initSocket } from './socket/initOrGetSocket.js';
 import express from 'express';
-import { socketHandler } from './socket/socketHandler.js';
+//Importing Routers
 import authRouter from './routes/authRoutes.js';
 dotenv.config();
+//Creating a ws server and httpServer
 const app = express();
 const server = createServer(app);
 const io = initSocket(server);
@@ -20,6 +23,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 //Routes
 app.use('/api/v1/auth', authRouter);
