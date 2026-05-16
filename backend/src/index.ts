@@ -7,10 +7,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import express from 'express';
-//Importing middlewares
-import { errorHandlerMiddleware } from './middlewares/errorhandler.js';
 //Importing Routers
 import authRouter from './routes/authRoutes.js';
+//Importing middlewares
+import { errorHandlerMiddleware } from './middlewares/errorhandler.js';
+import { authenticateUser } from './middlewares/authMiddleware.js';
 
 //Creating a ws server and httpServer
 const app = express();
@@ -29,7 +30,6 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 //Routes
 app.use('/api/v1/auth', authRouter);
-
 //Middlewares
 app.use(errorHandlerMiddleware);
 
