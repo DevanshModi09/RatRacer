@@ -4,18 +4,20 @@ import { createServer } from 'http';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import dotenv from 'dotenv';
+dotenv.config();
 import cors from 'cors';
 import express from 'express';
+//Importing middlewares
+import { errorHandlerMiddleware } from './middlewares/errorhandler.js';
 //Importing Routers
 import authRouter from './routes/authRoutes.js';
-dotenv.config();
+
 //Creating a ws server and httpServer
 const app = express();
 const server = createServer(app);
 const io = initSocket(server);
 socketHandler(io);
-
-//Middlewares
+//Other packages
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -27,6 +29,10 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 //Routes
 app.use('/api/v1/auth', authRouter);
+
+//Middlewares
+app.use(errorHandlerMiddleware);
+
 //Prod setup
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
