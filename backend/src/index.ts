@@ -9,6 +9,7 @@ import cors from 'cors';
 import express from 'express';
 //Importing Routers
 import authRouter from './routes/authRoutes.js';
+import roomRouter from './routes/roomRoutes.js';
 //Importing middlewares
 import { errorHandlerMiddleware } from './middlewares/errorhandler.js';
 import { authenticateUser } from './middlewares/authMiddleware.js';
@@ -30,6 +31,8 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 //Routes
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/room', authenticateUser, roomRouter);
+
 //Middlewares
 app.use(errorHandlerMiddleware);
 
