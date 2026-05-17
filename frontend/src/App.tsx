@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import SignUpPage from './pages/SignUpPage';
+import Leaderboard from './pages/Leaderboard';
 import LoginPage from './pages/LoginPage';
 import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -43,6 +44,10 @@ const App = () => {
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/leaderboard"
+          element={authUser ? <Leaderboard /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />
