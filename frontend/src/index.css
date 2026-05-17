@@ -1,6 +1,4 @@
-/* index.css */
 @import 'tailwindcss';
-@plugin "daisyui";
-@plugin "daisyui/theme" {
-  name: 'halloween';
+@plugin "daisyui" {
+  themes: halloween;
 }
