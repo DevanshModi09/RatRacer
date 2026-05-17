@@ -1,11 +1,4 @@
 const Homepage = () => {
-  return (
-
-    <>
-      <h1>Homepage</h1>
-      <button >JoinRoom</button>
-      <button>CreateRoom</button>
-    </>
-  );
+  return <div>HomepageThis is homepage</div>;
 };
 export default Homepage;
