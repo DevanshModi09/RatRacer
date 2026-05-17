@@ -60,6 +60,9 @@ class AuthControllers {
     });
     res.status(StatusCodes.OK).json({ msg: 'user logged out' });
   };
+  static checkAuth = async (req, res) => {
+    res.status(StatusCodes.OK).json(req.user);
+  };
 }
 
 export { AuthControllers };
