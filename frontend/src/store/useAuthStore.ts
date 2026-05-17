@@ -13,8 +13,7 @@ export const useAuthStore = create<any>((set) => ({
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get('/auth/check');
-      set({ authUser: res.data });
-      console.log(res.data);
+      set({ authUser: res.data.user });
     } catch (error) {
       console.log('Error in checkAuth:', error);
 
@@ -27,19 +26,50 @@ export const useAuthStore = create<any>((set) => ({
     set({ isSigningUp: true });
     try {
       const res = await axiosInstance.post('auth/register', data);
-      console.log(res.data);
-      set({ authUser: res.data });
+      set({ authUser: res.data.user });
       toast.success('Accout created sucessfully');
     } catch (error) {
-      console.log(error.response.data.msg);
       if (error.code === 'ERR_NETWORK') {
-        toast.error('Backend server is not running');
+        toast.error(
+          'Backend server is not running , Please contact an admin on discord',
+        );
         return;
       }
       const message = error?.response?.data?.msg || 'Something went wrong';
       toast.error(message);
     } finally {
       set({ isSigningUp: false });
+    }
+  },
+  //Login onClick
+  login: async (data) => {
+    set({ isLoggingIn: true });
+
+    try {
+      const res = await axiosInstance.post('/auth/login', data);
+      set({ authUser: res.data.user });
+      toast.success('Logged in successfully');
+    } catch (error) {
+      if (error.code === 'ERR_NETWORK') {
+        toast.error(
+          'Backend server is not running , Please contact an admin on discord',
+        );
+        return;
+      }
+      const message = error?.response?.data?.msg || 'Something went wrong';
+      toast.error(message);
+    } finally {
+      set({ isLoggingIn: false });
+    }
+  },
+  //Logout OnClick
+  logout: async () => {
+    try {
+      await axiosInstance.get('auth/logout');
+      set({ authUser: null });
+      toast.success('Logged out successfully');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
     }
   },
 }));
