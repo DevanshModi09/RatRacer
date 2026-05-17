@@ -5,7 +5,7 @@ export class UnauthorizedError extends CustomAPIError {
   constructor(message: string) {
     super(message);
 
-    this.statusCode = StatusCodes.FORBIDDEN;
+    this.statusCode = StatusCodes.UNAUTHORIZED;
 
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
