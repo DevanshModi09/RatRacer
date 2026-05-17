@@ -23,6 +23,10 @@ class AuthServices {
     const user: User = await prisma.user.findUnique({ where: { email } });
     return user;
   };
+  static findUserByUsername = async (username: string) => {
+    const user: User = await prisma.user.findUnique({ where: { username } });
+    return user;
+  };
   static comparePasswords = async (user: User, password) => {
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     return isPasswordCorrect;

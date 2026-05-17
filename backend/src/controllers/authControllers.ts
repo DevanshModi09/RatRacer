@@ -17,11 +17,15 @@ class AuthControllers {
     if (isUserAlready) {
       throw new CustomError.BadRequestError('Email already exists');
     }
+    const isUsernameAlready = await AuthServices.findUserByUsername(username);
+    if (isUsernameAlready) {
+      throw new CustomError.BadRequestError("Please choose a unique username")
+    }
     const user = await AuthServices.registerUser(username, email, password);
     //Creating Payload object of user;
     const tokenUser = createTokenUser(user);
     attachCookiesToResponse({ res, tokenUser });
-    res.status(200).json({ user: tokenUser });
+    res.status(200).json(tokenUser);
   };
 
   //LoginController
