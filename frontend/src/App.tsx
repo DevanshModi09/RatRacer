@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import Homepage from './pages/Homepagee';
+import Footer from './components/Footer';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -27,30 +28,33 @@ const App = () => {
   return (
     <div>
       <Navbar></Navbar>
-      <Routes>
-        <Route
-          path="/"
-          element={authUser ? <Homepage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-        />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route
-          path="/profile"
-          element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/leaderboard"
-          element={authUser ? <Leaderboard /> : <Navigate to="/login" />}
-        />
-      </Routes>
+      <main className="pt-16 pb-16">
+        <Routes>
+          <Route
+            path="/"
+            element={authUser ? <Homepage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/signup"
+            element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/login"
+            element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+          />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route
+            path="/profile"
+            element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/leaderboard"
+            element={authUser ? <Leaderboard /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </main>
       <Toaster />
+      <Footer></Footer>
     </div>
   );
 };
