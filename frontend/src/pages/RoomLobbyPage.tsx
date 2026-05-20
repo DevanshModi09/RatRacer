@@ -4,7 +4,6 @@ const RoomLobbyPage = () => {
   const {
     currentRoom,
     players,
-    isRaceStarted,
     isRoomLoading,
     isReady,
     setReady,
