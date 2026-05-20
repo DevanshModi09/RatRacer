@@ -9,14 +9,29 @@ import { useAuthStore } from './store/useAuthStore';
 import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
+import RoomLobbyPage from './pages/RoomLobbyPage';
 import Homepage from './pages/Homepagee';
+import { socket } from './utils/socket';
 import Footer from './components/Footer';
+import { useRoomStore } from './store/useRoomStore';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { initializeRoomListeners } = useRoomStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+  useEffect(() => {
+    if (authUser) {
+      socket.connect();
+      initializeRoomListeners();
+    } else {
+      socket.disconnect();
+    }
+    return () => {
+      socket.disconnect();
+    };
+  }, [authUser]);
 
   if (isCheckingAuth && !authUser) {
     return (
@@ -50,6 +65,10 @@ const App = () => {
           <Route
             path="/leaderboard"
             element={authUser ? <Leaderboard /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/room-lobby"
+            element={authUser ? <RoomLobbyPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </main>

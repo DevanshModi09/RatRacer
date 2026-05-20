@@ -22,6 +22,7 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
     };
     rooms.set(roomCode, room);
     socket.join(roomCode);
+    console.log(rooms);
     socket.emit('room_created', room);
   });
 
