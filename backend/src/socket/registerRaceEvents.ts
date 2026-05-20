@@ -1,8 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { rooms } from '../managers/roomManager.js';
-import { prependListener } from 'node:cluster';
 export const registerRaceEvents = (io: Server, socket: Socket) => {
-  socket.on('player-ready', (roomCode: string, isReady: boolean) => {
+  socket.on('player-ready', ({ roomCode, isReady }) => {
     const room = rooms.get(roomCode);
     if (!room) {
       return;

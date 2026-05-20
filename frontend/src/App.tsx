@@ -24,7 +24,6 @@ const App = () => {
   useEffect(() => {
     if (authUser) {
       socket.connect();
-      initializeRoomListeners();
     } else {
       socket.disconnect();
     }
@@ -32,7 +31,9 @@ const App = () => {
       socket.disconnect();
     };
   }, [authUser]);
-
+  useEffect(() => {
+    initializeRoomListeners();
+  }, []);
   if (isCheckingAuth && !authUser) {
     return (
       <div className="flex items-center justify-center h-screen">

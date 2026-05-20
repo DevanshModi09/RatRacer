@@ -7,14 +7,14 @@ export const useRoomStore = create<any>((set) => ({
   isRaceStarted: false,
   isReady: false,
   initializeRoomListeners: () => {
-    socket.on('room-updated', (room) => {
+    socket.on('room_updated', (room) => {
       set({
         currentRoom: room,
         players: room.players,
+        isRoomLoading: false,
       });
     });
     socket.on('room_created', (room) => {
-      console.log(room);
       set({
         currentRoom: room,
         players: room.players,
@@ -30,11 +30,15 @@ export const useRoomStore = create<any>((set) => ({
   createRoom: (authUser) => {
     socket.emit('create-room', { username: authUser.username });
   },
-
-  // setRoom: (roo(    )({
-  //     currentRoom: room,
-  //   }),
-
+  joinRoom: (roomCode, username) => {
+    socket.emit('join-room', { roomCode, username });
+  },
+  setReady: (roomCode, isReady) => {
+    set({
+      isReady: true,
+    });
+    socket.emit('player-ready', { roomCode, isReady: !isReady });
+  },
   setPlayers: (players) =>
     set({
       players,
