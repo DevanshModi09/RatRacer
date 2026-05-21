@@ -1,23 +1,14 @@
 import RaceCountdown from '../components/race/RaceCountdown.js';
-import RaceHeader from '../components/race/RaceHeader.js';
-// import RaceStats from '../components/race/RaceStats.js';
-import RaceText from '../components/race/RaceText.js';
-// import PlayersProgress from '../components/race/PlayersProgress.js';
+import RaceArea from '../components/race/RaceArea.js';
 
 const RacePage = () => {
   return (
     <div className="min-h-screen px-10 py-10">
-      <RaceHeader />
-
       <RaceCountdown />
-
       <div className="mt-12">
-        <RaceText />
+        <RaceArea />
       </div>
-
-      <div className="mt-12">{/* <PlayersProgress /> */}</div>
-
-      <div className="mt-12">{/* <RaceStats /> */}</div>
+      <div className="mt-12"></div>
     </div>
   );
 };

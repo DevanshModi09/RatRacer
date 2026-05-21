@@ -29,6 +29,18 @@ export const useRoomStore = create<any>((set) => ({
         isRoomLoading: false,
       });
     });
+    socket.on('opponent_progress', ({ socketId, username, progress, wpm }) => {
+      set((state) => ({
+        opponentsStats: {
+          ...state.opponentsStats,
+          [socketId]: {
+            username,
+            progress,
+            wpm,
+          },
+        },
+      }));
+    });
     socket.on('start-race', ({ text, startTime }) => {
       set({
         isRaceStarted: true,
@@ -52,6 +64,19 @@ export const useRoomStore = create<any>((set) => ({
       isRaceStarted: false,
       isRaceFinished: false,
       raceText: null,
+      opponentsStats: {},
+    });
+  },
+  setRaceFinished: (bool) => {
+    set({
+      isRaceFinished: bool,
+    });
+  },
+  setProgressUpdate: (roomCode, progress, wpm) => {
+    socket.emit('progress-update', {
+      roomCode,
+      progress,
+      wpm: Math.round(wpm),
     });
   },
   setReady: (roomCode, isReady) => {
