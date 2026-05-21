@@ -53,4 +53,17 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
       io.to(roomCode).emit('room_updated', room);
     },
   );
+  socket.on('leave-room', ({ roomCode }) => {
+    const room = rooms.get(roomCode);
+    if (!room) {
+      socket.emit('error_message', 'Room not found');
+      return;
+    }
+    room.players = room.players.filter((p) => p.socketId !== socket.id);
+    socket.leave(roomCode);
+    if (room.players.length === 0) {
+      rooms.delete(roomCode);
+    }
+    io.to(roomCode).emit('room_updated', room);
+  });
 };

@@ -1,11 +1,19 @@
 import { create } from 'zustand';
 import { socket } from '../utils/socket';
 export const useRoomStore = create<any>((set) => ({
+  raceText: null,
+  startTime: null,
+  endTime: null,
   currentRoom: null,
-  isRoomLoading: true,
   players: [],
+  isRoomLoading: true,
   isRaceStarted: false,
+  isRaceFinished: false,
+  countdown: null,
   isReady: false,
+  opponentsStats: {},
+  winner: null,
+  raceResults: [],
   initializeRoomListeners: () => {
     socket.on('room_updated', (room) => {
       set({
@@ -21,9 +29,11 @@ export const useRoomStore = create<any>((set) => ({
         isRoomLoading: false,
       });
     });
-    socket.on('race-started', () => {
+    socket.on('start-race', ({ text, startTime }) => {
       set({
         isRaceStarted: true,
+        raceText: text,
+        startTime: startTime,
       });
     });
   },
@@ -33,26 +43,25 @@ export const useRoomStore = create<any>((set) => ({
   joinRoom: (roomCode, username) => {
     socket.emit('join-room', { roomCode, username });
   },
+  leaveRoom: (roomCode) => {
+    socket.emit('leave-room', { roomCode });
+    set({
+      currentRoom: null,
+      players: [],
+      isReady: false,
+      isRaceStarted: false,
+      isRaceFinished: false,
+      raceText: null,
+    });
+  },
   setReady: (roomCode, isReady) => {
     set({
-      isReady: true,
+      isReady: !isReady,
     });
     socket.emit('player-ready', { roomCode, isReady: !isReady });
   },
   setPlayers: (players) =>
     set({
       players,
-    }),
-
-  startRace: () =>
-    set({
-      isRaceStarted: true,
-    }),
-
-  leaveRoom: () =>
-    set({
-      currentRoom: null,
-      players: [],
-      isRaceStarted: false,
     }),
 }));

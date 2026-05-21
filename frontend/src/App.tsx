@@ -11,13 +11,14 @@ import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import RoomLobbyPage from './pages/RoomLobbyPage';
 import Homepage from './pages/Homepagee';
+import RacePage from './pages/RacePage';
 import { socket } from './utils/socket';
 import Footer from './components/Footer';
 import { useRoomStore } from './store/useRoomStore';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-  const { initializeRoomListeners } = useRoomStore();
+  const { initializeRoomListeners,currentRoom } = useRoomStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -69,7 +70,15 @@ const App = () => {
           />
           <Route
             path="/room-lobby"
-            element={authUser ? <RoomLobbyPage /> : <Navigate to="/login" />}
+            element={
+              authUser && currentRoom ? <RoomLobbyPage /> : <Navigate to="/" />
+            }
+          />
+          <Route
+            path="/race"
+            element={
+              authUser && currentRoom ? <RacePage /> : <Navigate to="/" />
+            }
           />
         </Routes>
       </main>
