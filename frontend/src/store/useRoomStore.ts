@@ -14,6 +14,10 @@ export const useRoomStore = create<any>((set) => ({
   opponentsStats: {},
   winner: null,
   raceResults: [],
+  setCountdown: (countdown) =>
+    set({
+      countdown,
+    }),
   initializeRoomListeners: () => {
     socket.on('room_updated', (room) => {
       set({

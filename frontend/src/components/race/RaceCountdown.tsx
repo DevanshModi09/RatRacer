@@ -2,9 +2,7 @@ import { useRoomStore } from '../../store/useRoomStore';
 import { useEffect, useState } from 'react';
 
 const RaceCountdown = () => {
-  const { startTime } = useRoomStore();
-
-  const [countdown, setCountdown] = useState<number | null>(null);
+  const { startTime, countdown, setCountdown } = useRoomStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,5 +27,4 @@ const RaceCountdown = () => {
     </div>
   );
 };
-
 export default RaceCountdown;

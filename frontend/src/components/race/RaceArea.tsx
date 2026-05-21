@@ -12,9 +12,9 @@ type Stats = {
 
 const RaceArea = () => {
   const [typingInput, setTypingInput] = useState('');
-
   const {
     raceText,
+    countdown,
     currentRoom,
     setProgressUpdate,
     opponentsStats,
@@ -201,6 +201,7 @@ const RaceArea = () => {
           {!isRaceFinished ? (
             <input
               type="text"
+              disabled={countdown !== 0}
               value={typingInput}
               onChange={handleTyping}
               placeholder="Start typing..."
