@@ -1,5 +1,5 @@
 import { useRoomStore } from '../../store/useRoomStore';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 type Stats = {
   correctChars: number;
@@ -11,6 +11,7 @@ type Stats = {
 };
 
 const RaceArea = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [typingInput, setTypingInput] = useState('');
   const {
     raceText,
@@ -33,7 +34,11 @@ const RaceArea = () => {
     accuracy: 0,
     finished: false,
   });
-
+  useEffect(() => {
+    if (countdown === 0) {
+      inputRef.current?.focus();
+    }
+  }, [countdown]);
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -204,6 +209,7 @@ const RaceArea = () => {
               disabled={countdown !== 0}
               value={typingInput}
               onChange={handleTyping}
+              ref={inputRef}
               placeholder="Start typing..."
               className="input input-bordered input-primary w-full text-lg"
               autoFocus
