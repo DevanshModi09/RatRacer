@@ -2,6 +2,16 @@ import { Server, Socket } from 'socket.io';
 import { rooms } from '../managers/roomManager.js';
 import { prisma } from '../lib/prisma.js';
 import { User } from '../generated/prisma/client.js';
+async function finalizeRace(room) {
+  if (room.raceEnded) {
+    return;
+  }
+
+  room.raceEnded = true;
+  const standings = [...room.players].sort(
+    (a, b) => a.finishedAt! - b.finishedAt!,
+  );
+}
 export const registerRaceEvents = (io: Server, socket: Socket) => {
   socket.on('player-ready', ({ roomCode, isReady }) => {
     const room = rooms.get(roomCode);
@@ -65,12 +75,15 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
     if (!player) {
       return;
     }
-   
+
     player.finished = true;
     player.wpm = stats.wpm;
     player.progress = stats.progress;
     player.accuracy = stats.accuracy;
     player.finishedAt = Date.now();
-
+    const allFinished = room.players.every((p) => p.finished);
+    if (allFinished) {
+      finalizeRace(room);
+    }
   });
 };

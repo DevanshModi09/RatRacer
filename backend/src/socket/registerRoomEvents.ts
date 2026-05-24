@@ -7,7 +7,8 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
   socket.on('create-room', ({ username }: { username: string }) => {
     const roomCode = generateRoomCode();
     const player: Player = {
-      username,
+      userId: socket.data.user.userId,
+      username: socket.data.user.username,
       ready: false,
       finished: false,
       wpm: 0,
