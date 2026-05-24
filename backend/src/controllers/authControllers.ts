@@ -24,11 +24,20 @@ class AuthControllers {
     const user = await AuthServices.registerUser(username, email, password);
     //Creating Payload object of user;
     const tokenUser = createTokenUser(user);
-    const { xp, level, coins, bestWpm, avgWpm } = user;
+    const { xp, level, coins, bestWpm, avgWpm, totalRaces, totalWins } = user;
     attachCookiesToResponse({ res, tokenUser });
 
     res.status(200).json({
-      user: { ...tokenUser, xp, level, coins, bestWpm, avgWpm },
+      user: {
+        ...tokenUser,
+        xp,
+        level,
+        coins,
+        bestWpm,
+        avgWpm,
+        totalRaces,
+        totalWins,
+      },
       message: 'Account Created',
     });
   };
@@ -59,10 +68,19 @@ class AuthControllers {
     //! Attaching the cookie here (not sending the response)
 
     attachCookiesToResponse({ res, tokenUser });
-    const { xp, level, coins, bestWpm, avgWpm } = user;
+    const { xp, level, coins, bestWpm, avgWpm, totalRaces, totalWins } = user;
     //Sending the response here
     res.status(StatusCodes.OK).json({
-      user: { ...tokenUser, xp, level, coins, bestWpm, avgWpm },
+      user: {
+        ...tokenUser,
+        xp,
+        level,
+        coins,
+        bestWpm,
+        avgWpm,
+        totalRaces,
+        totalWins,
+      },
       message: 'User Logged In',
     });
   };
@@ -75,9 +93,18 @@ class AuthControllers {
   };
   static checkAuth = async (req, res) => {
     const user = await AuthServices.findUserById(req.user.userId);
-    const { xp, level, coins, bestWpm, avgWpm } = user;
+    const { xp, level, coins, bestWpm, avgWpm, totalRaces, totalWins } = user;
     res.status(StatusCodes.OK).json({
-      user: { ...req.user, xp, level, coins, bestWpm, avgWpm },
+      user: {
+        ...req.user,
+        xp,
+        level,
+        coins,
+        bestWpm,
+        avgWpm,
+        totalRaces,
+        totalWins,
+      },
       message: 'User Logged In',
     });
   };
