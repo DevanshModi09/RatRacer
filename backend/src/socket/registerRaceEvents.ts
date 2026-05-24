@@ -24,6 +24,7 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
       });
     }
   });
+
   socket.on(
     'progress-update',
     ({
@@ -53,4 +54,5 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
       });
     },
   );
+  socket.on('race-finished-for-one-user', ({ roomCode, stats }) => {});
 };

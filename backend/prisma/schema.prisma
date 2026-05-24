@@ -30,4 +30,17 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt DateTime @updatedAt
   isVerified  Boolean @default(false)
+  raceResults RaceResult[]
+}
+model RaceResult {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id])
+  roomCode      String
+  wpm           Int
+  accuracy      Float
+  position      Int
+  xpEarned      Int
+  coinsEarned   Int
+  createdAt     DateTime @default(now())
 }

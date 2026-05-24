@@ -71,9 +71,13 @@ export const useRoomStore = create<any>((set) => ({
       opponentsStats: {},
     });
   },
-  setRaceFinished: (bool) => {
+  setRaceFinished: (bool, roomCode, stats) => {
     set({
       isRaceFinished: bool,
+    });
+    socket.emit('race-finished-for-one-user', {
+      stats: { ...stats },
+      roomCode,
     });
   },
   setProgressUpdate: (roomCode, progress, wpm) => {

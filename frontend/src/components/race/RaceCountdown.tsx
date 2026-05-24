@@ -1,5 +1,5 @@
 import { useRoomStore } from '../../store/useRoomStore';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 
 const RaceCountdown = () => {
   const { startTime, countdown, setCountdown } = useRoomStore();

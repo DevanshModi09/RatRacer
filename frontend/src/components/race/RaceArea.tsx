@@ -44,9 +44,7 @@ const RaceArea = () => {
 
     // STRICT WORD CHECK
     const typedWords = value.split(' ');
-
     const targetWords = raceText.split(' ');
-
     if (value.endsWith(' ')) {
       const previousTypedWord = typedWords[typedWords.length - 2];
 
@@ -92,9 +90,8 @@ const RaceArea = () => {
     setStats(updatedStats);
 
     if (finished) {
-      setRaceFinished(true);
+      setRaceFinished(true, currentRoom.roomCode, updatedStats);
     }
-
     setProgressUpdate(currentRoom.roomCode, progress, Math.round(wpm));
   };
 
