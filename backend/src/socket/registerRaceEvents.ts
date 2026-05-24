@@ -1,5 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { rooms } from '../managers/roomManager.js';
+import { prisma } from '../lib/prisma.js';
+import { User } from '../generated/prisma/client.js';
 export const registerRaceEvents = (io: Server, socket: Socket) => {
   socket.on('player-ready', ({ roomCode, isReady }) => {
     const room = rooms.get(roomCode);
@@ -54,5 +56,21 @@ export const registerRaceEvents = (io: Server, socket: Socket) => {
       });
     },
   );
-  socket.on('race-finished-for-one-user', ({ roomCode, stats }) => {});
+  socket.on('race-finished-for-one-user', ({ roomCode, stats }) => {
+    const room = rooms.get(roomCode);
+    if (!room) {
+      return;
+    }
+    const player = room?.players.find((p) => p.socketId === socket.id);
+    if (!player) {
+      return;
+    }
+   
+    player.finished = true;
+    player.wpm = stats.wpm;
+    player.progress = stats.progress;
+    player.accuracy = stats.accuracy;
+    player.finishedAt = Date.now();
+
+  });
 };

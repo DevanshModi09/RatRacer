@@ -2,6 +2,8 @@ export interface Player {
   socketId: string;
   username: string;
   ready: boolean;
+  accuracy?: number;
+  finishedAt?: number;
   progress: number;
   wpm: number;
   finished: boolean;

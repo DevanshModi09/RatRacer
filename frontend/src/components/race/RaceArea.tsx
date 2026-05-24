@@ -88,7 +88,6 @@ const RaceArea = () => {
     };
 
     setStats(updatedStats);
-
     if (finished) {
       setRaceFinished(true, currentRoom.roomCode, updatedStats);
     }
