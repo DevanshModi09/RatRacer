@@ -26,35 +26,55 @@ async function finalizeRace(room) {
       xp += 20;
       coins += 40;
     }
-    await prisma.raceResult.create({
-      data: {
-        userId: player.userId,
-        roomCode: room.roomCode,
-        playersInRoom: room.players.length,
-        position,
-        wpm: player.wpm,
-        accuracy: player.accuracy || 0,
-        xpEarned: xp,
-        coinsEarned: coins,
-      },
-    });
-    await prisma.user.update({
+    const existingUser = await prisma.user.findUnique({
       where: {
         id: player.userId,
       },
-      data: {
-        xp: {
-          increment: xp,
-        },
-        coins: {
-          increment: coins,
-        },
-        totalRaces: {
-          increment: 1,
-        },
-        totalWins: position === 1 ? { increment: 1 } : undefined,
-      },
     });
+
+    if (!existingUser) {
+      continue;
+    }
+    const bestWpm = Math.max(existingUser.bestWpm, player.wpm);
+    const avgWpm = Number(
+      (
+        (existingUser.avgWpm * existingUser.totalRaces + player.wpm) /
+        (existingUser.totalRaces + 1)
+      ).toFixed(2),
+    );
+    await prisma.$transaction([
+      prisma.raceResult.create({
+        data: {
+          userId: player.userId,
+          roomCode: room.roomCode,
+          playersInRoom: room.players.length,
+          position,
+          wpm: player.wpm,
+          accuracy: player.accuracy || 0,
+          xpEarned: xp,
+          coinsEarned: coins,
+        },
+      }),
+      prisma.user.update({
+        where: {
+          id: player.userId,
+        },
+        data: {
+          xp: {
+            increment: xp,
+          },
+          coins: {
+            increment: coins,
+          },
+          totalRaces: {
+            increment: 1,
+          },
+          totalWins: position === 1 ? { increment: 1 } : undefined,
+          bestWpm,
+          avgWpm,
+        },
+      }),
+    ]);
   }
 }
 export const registerRaceEvents = (io: Server, socket: Socket) => {
