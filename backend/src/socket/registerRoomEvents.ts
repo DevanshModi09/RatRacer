@@ -41,7 +41,8 @@ export const registerRoomEvents = (io: Server, socket: Socket) => {
         return;
       }
       const player: Player = {
-        username,
+        userId: socket.data.user.userId,
+        username: socket.data.user.username,
         ready: false,
         finished: false,
         wpm: 0,

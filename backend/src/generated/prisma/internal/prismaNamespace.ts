@@ -384,7 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  RaceResult: 'RaceResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user"
+    modelProps: "user" | "raceResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +479,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RaceResult: {
+      payload: Prisma.$RaceResultPayload<ExtArgs>
+      fields: Prisma.RaceResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RaceResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RaceResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        findFirst: {
+          args: Prisma.RaceResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RaceResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        findMany: {
+          args: Prisma.RaceResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>[]
+        }
+        create: {
+          args: Prisma.RaceResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        createMany: {
+          args: Prisma.RaceResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RaceResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>[]
+        }
+        delete: {
+          args: Prisma.RaceResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        update: {
+          args: Prisma.RaceResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.RaceResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RaceResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RaceResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.RaceResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RaceResultPayload>
+        }
+        aggregate: {
+          args: Prisma.RaceResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRaceResult>
+        }
+        groupBy: {
+          args: Prisma.RaceResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RaceResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RaceResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RaceResultCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -536,6 +611,22 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const RaceResultScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roomCode: 'roomCode',
+  wpm: 'wpm',
+  accuracy: 'accuracy',
+  position: 'position',
+  playersInRoom: 'playersInRoom',
+  xpEarned: 'xpEarned',
+  coinsEarned: 'coinsEarned',
+  createdAt: 'createdAt'
+} as const
+
+export type RaceResultScalarFieldEnum = (typeof RaceResultScalarFieldEnum)[keyof typeof RaceResultScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -747,6 +838,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  raceResult?: Prisma.RaceResultOmit
 }
 
 /* Types for Logging */

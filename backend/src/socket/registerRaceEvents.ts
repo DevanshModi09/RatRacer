@@ -1,16 +1,61 @@
 import { Server, Socket } from 'socket.io';
 import { rooms } from '../managers/roomManager.js';
 import { prisma } from '../lib/prisma.js';
-import { User } from '../generated/prisma/client.js';
 async function finalizeRace(room) {
   if (room.raceEnded) {
     return;
   }
-
   room.raceEnded = true;
   const standings = [...room.players].sort(
     (a, b) => a.finishedAt! - b.finishedAt!,
   );
+  for (const [index, player] of standings.entries()) {
+    const position = index + 1;
+    let xp = 10;
+    let coins = 20;
+    if (player.wpm >= 120) {
+      xp += 200;
+      coins += 200;
+    } else if (player.wpm >= 100) {
+      xp += 100;
+      coins += 150;
+    } else if (player.wpm >= 75) {
+      xp += 40;
+      coins += 75;
+    } else if (player.wpm >= 50) {
+      xp += 20;
+      coins += 40;
+    }
+    await prisma.raceResult.create({
+      data: {
+        userId: player.userId,
+        roomCode: room.roomCode,
+        playersInRoom: room.players.length,
+        position,
+        wpm: player.wpm,
+        accuracy: player.accuracy || 0,
+        xpEarned: xp,
+        coinsEarned: coins,
+      },
+    });
+    await prisma.user.update({
+      where: {
+        id: player.userId,
+      },
+      data: {
+        xp: {
+          increment: xp,
+        },
+        coins: {
+          increment: coins,
+        },
+        totalRaces: {
+          increment: 1,
+        },
+        totalWins: position === 1 ? { increment: 1 } : undefined,
+      },
+    });
+  }
 }
 export const registerRaceEvents = (io: Server, socket: Socket) => {
   socket.on('player-ready', ({ roomCode, isReady }) => {

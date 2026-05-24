@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  RaceResult: 'RaceResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -89,6 +90,22 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const RaceResultScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roomCode: 'roomCode',
+  wpm: 'wpm',
+  accuracy: 'accuracy',
+  position: 'position',
+  playersInRoom: 'playersInRoom',
+  xpEarned: 'xpEarned',
+  coinsEarned: 'coinsEarned',
+  createdAt: 'createdAt'
+} as const
+
+export type RaceResultScalarFieldEnum = (typeof RaceResultScalarFieldEnum)[keyof typeof RaceResultScalarFieldEnum]
 
 
 export const SortOrder = {

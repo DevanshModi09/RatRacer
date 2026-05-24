@@ -46,3 +46,8 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model RaceResult
+ * 
+ */
+export type RaceResult = Prisma.RaceResultModel
