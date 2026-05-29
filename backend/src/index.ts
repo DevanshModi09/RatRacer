@@ -32,7 +32,6 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 //Routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/room', authenticateUser, roomRouter);
 app.use('/api/v1/leaderboard', leaderboardRouter);
 
 //Middlewares
