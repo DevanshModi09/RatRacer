@@ -1,74 +1,84 @@
 import { create } from 'zustand';
-import { axiosInstance } from '../lib/axios.js';
+import { axiosInstance, getErrorMessage } from '../lib/axios';
 import toast from 'react-hot-toast';
-export const useAuthStore = create<any>((set) => ({
+import type { AuthUser } from '../types';
+
+interface SignupData {
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface AuthStore {
+  authUser: AuthUser | null;
+  isSigningUp: boolean;
+  isLoggingIn: boolean;
+  isCheckingAuth: boolean;
+  checkAuth: () => Promise<void>;
+  signup: (data: SignupData) => Promise<boolean>;
+  login: (data: LoginData) => Promise<boolean>;
+  logout: () => Promise<void>;
+}
+
+export const useAuthStore = create<AuthStore>((set) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
-  isUpdatingProfile: false,
   isCheckingAuth: true,
-  onlineUsers: [],
-  socket: null,
 
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get('/auth/check');
       set({ authUser: res.data.user });
-    } catch (error) {
-      console.log('Error in checkAuth:', error.response.data.msg);
+    } catch {
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
     }
   },
+
   signup: async (data) => {
     set({ isSigningUp: true });
     try {
-      const res = await axiosInstance.post('auth/register', data);
+      const res = await axiosInstance.post('/auth/register', data);
       set({ authUser: res.data.user });
-      toast.success('Accout created sucessfully');
+      toast.success('Account created successfully');
+      return true;
     } catch (error) {
-      if (error.code === 'ERR_NETWORK') {
-        toast.error(
-          'Backend server is not running , Please contact an admin on discord',
-        );
-        return;
-      }
-      const message = error?.response?.data?.msg || 'Something went wrong';
-      toast.error(message);
+      toast.error(getErrorMessage(error));
+      return false;
     } finally {
       set({ isSigningUp: false });
     }
   },
-  //Login onClick
+
   login: async (data) => {
     set({ isLoggingIn: true });
-
     try {
       const res = await axiosInstance.post('/auth/login', data);
       set({ authUser: res.data.user });
       toast.success('Logged in successfully');
+      return true;
     } catch (error) {
-      if (error.code === 'ERR_NETWORK') {
-        toast.error(
-          'Backend server is not running , Please contact an admin on discord',
-        );
-        return;
-      }
-      const message = error?.response?.data?.msg || 'Something went wrong';
-      toast.error(message);
+      toast.error(getErrorMessage(error));
+      return false;
     } finally {
       set({ isLoggingIn: false });
     }
   },
-  //Logout OnClick
+
   logout: async () => {
     try {
-      await axiosInstance.get('auth/logout');
+      await axiosInstance.get('/auth/logout');
       set({ authUser: null });
       toast.success('Logged out successfully');
     } catch (error) {
-      toast.error(error?.response?.data?.msg);
+      toast.error(getErrorMessage(error));
     }
   },
 }));

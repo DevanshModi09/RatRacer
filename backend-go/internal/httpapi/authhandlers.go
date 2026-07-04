@@ -56,18 +56,22 @@ func statsOf(u *models.User) userStats {
 }
 
 type userResponse struct {
-	Username string `json:"username"`
-	UserId   uint   `json:"userId"`
-	Role     string `json:"role"`
+	Username   string `json:"username"`
+	UserId     uint   `json:"userId"`
+	Role       string `json:"role"`
+	Email      string `json:"email"`
+	IsVerified bool   `json:"isVerified"`
 	userStats
 }
 
 func userResponseOf(payload auth.TokenPayload, u *models.User) userResponse {
 	return userResponse{
-		Username:  payload.Username,
-		UserId:    payload.UserId,
-		Role:      payload.Role,
-		userStats: statsOf(u),
+		Username:   payload.Username,
+		UserId:     payload.UserId,
+		Role:       payload.Role,
+		Email:      u.Email,
+		IsVerified: u.IsVerified,
+		userStats:  statsOf(u),
 	}
 }
 

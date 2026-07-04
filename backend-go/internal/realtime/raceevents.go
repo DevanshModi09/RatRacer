@@ -1,6 +1,7 @@
 package realtime
 
 import (
+	"math/rand"
 	"sort"
 	"time"
 
@@ -11,7 +12,31 @@ import (
 	"ratracer/backend/internal/room"
 )
 
-const raceText = "should stand how still little back time real say play give even if can much in as order say should same well great but end could there would set well down take no because which early show plan"
+var raceTexts = []string{
+	"should stand how still little back time real say play give even if can much in as order say should same well great but end could there would set well down take no because which early show plan",
+	"the quick brown fox jumps over the lazy dog while the sun sets behind the old stone bridge near the quiet river",
+	"practice makes perfect and every single keystroke brings you closer to mastering the art of fast accurate typing",
+	"great things never come from comfort zones so keep pushing forward one word at a time until you reach the finish",
+	"a journey of a thousand miles begins with a single step and every race you run makes you a little bit faster",
+	"success is not final failure is not fatal it is the courage to continue that counts the most in the long run",
+	"code is like humor when you have to explain it it is bad so keep your functions short and your logic clean",
+	"the early bird catches the worm but the second mouse gets the cheese so timing is not always everything",
+	"typing fast is a skill built through repetition patience and a calm steady mind under pressure and time",
+	"races are won in the small moments of focus where every finger knows exactly where to go without hesitation",
+}
+
+func randomRaceText() string {
+	return raceTexts[rand.Intn(len(raceTexts))]
+}
+
+type standing struct {
+	Username    string  `json:"username"`
+	Wpm         int     `json:"wpm"`
+	Accuracy    float64 `json:"accuracy"`
+	Position    int     `json:"position"`
+	XPEarned    int     `json:"xpEarned"`
+	CoinsEarned int     `json:"coinsEarned"`
+}
 
 func findPlayer(r *room.Room, socketId string) *room.Player {
 	for _, p := range r.Players {
@@ -37,7 +62,7 @@ func rewardFor(wpm int) (xp int, coins int) {
 	return xp, coins
 }
 
-func finalizeRace(db *gorm.DB, r *room.Room) {
+func finalizeRace(io *socketio.Server, db *gorm.DB, r *room.Room) {
 	if r.RaceEnded {
 		return
 	}
@@ -48,6 +73,8 @@ func finalizeRace(db *gorm.DB, r *room.Room) {
 	sort.Slice(standings, func(i, j int) bool {
 		return standings[i].FinishedAt < standings[j].FinishedAt
 	})
+
+	results := make([]standing, 0, len(standings))
 
 	for index, player := range standings {
 		position := index + 1
@@ -91,7 +118,20 @@ func finalizeRace(db *gorm.DB, r *room.Room) {
 			}
 			return tx.Model(&models.User{}).Where("id = ?", player.UserId).Updates(updates).Error
 		})
+
+		results = append(results, standing{
+			Username:    player.Username,
+			Wpm:         player.Wpm,
+			Accuracy:    player.Accuracy,
+			Position:    position,
+			XPEarned:    xp,
+			CoinsEarned: coins,
+		})
 	}
+
+	io.To(socketio.Room(r.RoomCode)).Emit("race-results", map[string]any{
+		"standings": results,
+	})
 }
 
 func registerRaceEvents(io *socketio.Server, socket *socketio.Socket, rooms *room.Manager, db *gorm.DB) {
@@ -128,7 +168,7 @@ func registerRaceEvents(io *socketio.Server, socket *socketio.Socket, rooms *roo
 		io.To(socketio.Room(body.RoomCode)).Emit("room_updated", r)
 
 		if allReady {
-			r.Text = raceText
+			r.Text = randomRaceText()
 			r.RaceStarted = true
 			startTime := time.Now().Add(5 * time.Second).UnixMilli()
 			io.To(socketio.Room(body.RoomCode)).Emit("start-race", map[string]any{
@@ -210,7 +250,37 @@ func registerRaceEvents(io *socketio.Server, socket *socketio.Socket, rooms *roo
 		})
 
 		if allFinished {
-			finalizeRace(db, r)
+			finalizeRace(io, db, r)
 		}
+	})
+
+	socket.On("rematch", func(args ...any) {
+		var body struct {
+			RoomCode string `json:"roomCode"`
+		}
+		if len(args) == 0 || bind(args[0], &body) != nil {
+			return
+		}
+
+		r, ok := rooms.Get(body.RoomCode)
+		if !ok {
+			return
+		}
+
+		rooms.WithLock(func() {
+			r.RaceStarted = false
+			r.RaceEnded = false
+			r.Text = ""
+			for _, p := range r.Players {
+				p.Ready = false
+				p.Finished = false
+				p.Wpm = 0
+				p.Progress = 0
+				p.Accuracy = 0
+				p.FinishedAt = 0
+			}
+		})
+
+		io.To(socketio.Room(body.RoomCode)).Emit("room_updated", r)
 	})
 }

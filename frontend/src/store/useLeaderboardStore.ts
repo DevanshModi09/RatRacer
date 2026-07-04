@@ -1,45 +1,27 @@
 import { create } from 'zustand';
-import { axiosInstance } from '../lib/axios.js';
+import { axiosInstance, getErrorMessage } from '../lib/axios';
+import toast from 'react-hot-toast';
+import type { LeaderboardEntry } from '../types';
 
-type LeaderboardUser = {
-  username: string;
-  bestWpm: number;
-  avgWpm: number;
-  totalWins: number;
-  totalRaces: number;
-  level: number;
-};
-
-type LeaderboardStore = {
-  leaderboard: LeaderboardUser[];
-
+interface LeaderboardStore {
+  leaderboard: LeaderboardEntry[];
   isLeaderboardLoading: boolean;
-
   fetchLeaderboard: () => Promise<void>;
-};
+}
 
 export const useLeaderboardStore = create<LeaderboardStore>((set) => ({
   leaderboard: [],
-
   isLeaderboardLoading: false,
 
   fetchLeaderboard: async () => {
     try {
-      set({
-        isLeaderboardLoading: true,
-      });
-      const res = await axiosInstance.get('/leaderboard/', {
-        withCredentials: true,
-      });
-      set({
-        leaderboard: res.data.leaderboard,
-      });
-    } catch (err) {
-      console.log(err);
+      set({ isLeaderboardLoading: true });
+      const res = await axiosInstance.get('/leaderboard/');
+      set({ leaderboard: res.data.leaderboard });
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Could not load the leaderboard'));
     } finally {
-      set({
-        isLeaderboardLoading: false,
-      });
+      set({ isLeaderboardLoading: false });
     }
   },
 }));
