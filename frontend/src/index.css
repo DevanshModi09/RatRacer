@@ -1,4 +1,132 @@
 @import 'tailwindcss';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/800.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
 @plugin "daisyui" {
-  themes: halloween;
+  themes: ratracer --default, ratracer-light;
+}
+
+@plugin "daisyui/theme" {
+  name: 'ratracer';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #0a0a0c;
+  --color-base-200: #131316;
+  --color-base-300: #1e1e22;
+  --color-base-content: #d1d0c5;
+  --color-primary: #e2b714;
+  --color-primary-content: #100e02;
+  --color-secondary: #8b7cff;
+  --color-secondary-content: #100e02;
+  --color-accent: #4fd1c5;
+  --color-accent-content: #04201d;
+  --color-neutral: #1e1e22;
+  --color-neutral-content: #d1d0c5;
+  --color-info: #4fa3ff;
+  --color-info-content: #04101f;
+  --color-success: #59c26e;
+  --color-success-content: #04170a;
+  --color-warning: #e2b714;
+  --color-warning-content: #100e02;
+  --color-error: #ca4754;
+  --color-error-content: #2a0306;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: 'ratracer-light';
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: #fbfaf6;
+  --color-base-200: #f1efe6;
+  --color-base-300: #e4e1d3;
+  --color-base-content: #1e1c14;
+  --color-primary: #b8860b;
+  --color-primary-content: #fffdf7;
+  --color-secondary: #6c5ce7;
+  --color-secondary-content: #fdfdff;
+  --color-accent: #12897f;
+  --color-accent-content: #f0fffd;
+  --color-neutral: #e4e1d3;
+  --color-neutral-content: #1e1c14;
+  --color-info: #2f74c0;
+  --color-info-content: #f2f8ff;
+  --color-success: #2f9e51;
+  --color-success-content: #f1fff5;
+  --color-warning: #b8860b;
+  --color-warning-content: #fffdf7;
+  --color-error: #b23a45;
+  --color-error-content: #fff2f3;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  min-height: 100vh;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-primary) 35%, transparent);
+}
+
+.font-race {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 0.5rem 0;
+  background: var(--color-primary);
+  color: var(--color-primary-content);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  left: 0;
 }

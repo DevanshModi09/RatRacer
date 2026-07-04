@@ -10,13 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "@tailwindcss/vite": "^4.3.0",
     "@vitejs/plugin-react": "^6.0.1",
     "axios": "^1.16.1",
+    "daisyui": "5.5.19",
     "lucide-react": "^1.16.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "daisyui": "5.5.19",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.15.1",
     "socket.io-client": "^4.8.3",
