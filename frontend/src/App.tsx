@@ -11,17 +11,21 @@ import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import RoomLobbyPage from './pages/RoomLobbyPage';
 import Homepage from './pages/Homepagee';
+import LandingPage from './pages/LandingPage';
 import RacePage from './pages/RacePage';
+import NotFoundPage from './pages/NotFoundPage';
 import { socket } from './utils/socket';
 import Footer from './components/Footer';
 import { useRoomStore } from './store/useRoomStore';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-  const { initializeRoomListeners,currentRoom } = useRoomStore();
+  const { initializeRoomListeners, currentRoom } = useRoomStore();
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
   useEffect(() => {
     if (authUser) {
       socket.connect();
@@ -32,58 +36,64 @@ const App = () => {
       socket.disconnect();
     };
   }, [authUser]);
-  useEffect(() => {
-    initializeRoomListeners();
-  }, []);
+
+  useEffect(() => initializeRoomListeners(), [initializeRoomListeners]);
+
   if (isCheckingAuth && !authUser) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
+        <Loader className="size-10 animate-spin" aria-label="Loading" />
       </div>
     );
   }
+
   return (
-    <div>
-      <Navbar></Navbar>
-      <main className="pt-16 pb-16">
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main id="main-content" className="flex-1 pt-16">
         <Routes>
           <Route
             path="/"
-            element={authUser ? <Homepage /> : <Navigate to="/login" />}
+            element={authUser ? <Homepage /> : <LandingPage />}
           />
           <Route
             path="/signup"
-            element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+            element={!authUser ? <SignUpPage /> : <Navigate to="/" replace />}
           />
           <Route
             path="/login"
-            element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+            element={!authUser ? <LoginPage /> : <Navigate to="/" replace />}
           />
           <Route path="/settings" element={<SettingsPage />} />
           <Route
             path="/profile"
-            element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+            element={authUser ? <ProfilePage /> : <Navigate to="/login" replace />}
           />
           <Route
             path="/leaderboard"
-            element={authUser ? <Leaderboard /> : <Navigate to="/login" />}
+            element={authUser ? <Leaderboard /> : <Navigate to="/login" replace />}
           />
           <Route
             path="/room-lobby"
             element={
-              authUser && currentRoom ? <RoomLobbyPage /> : <Navigate to="/" />
+              authUser && currentRoom ? (
+                <RoomLobbyPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
             }
           />
           <Route
             path="/race"
             element={
-              authUser && currentRoom ? <RacePage /> : <Navigate to="/" />
+              authUser && currentRoom ? <RacePage /> : <Navigate to="/" replace />
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <Toaster />
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
