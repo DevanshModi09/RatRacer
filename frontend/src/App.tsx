@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import RoomLobbyPage from './pages/RoomLobbyPage';
-import Homepage from './pages/Homepagee';
+import Homepage from './pages/Homepage';
 import LandingPage from './pages/LandingPage';
 import RacePage from './pages/RacePage';
 import NotFoundPage from './pages/NotFoundPage';
