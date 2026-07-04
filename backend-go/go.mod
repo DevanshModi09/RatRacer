@@ -3,10 +3,19 @@ module ratracer/backend
 go 1.26.3
 
 require (
+	github.com/gofiber/fiber/v2 v2.52.13
+	github.com/golang-jwt/jwt/v5 v5.3.1
+	github.com/joho/godotenv v1.5.1
+	github.com/zishang520/socket.io/servers/socket/v3 v3.0.4
+	github.com/zishang520/socket.io/v3 v3.0.4
+	golang.org/x/crypto v0.53.0
+	gorm.io/driver/postgres v1.6.0
+	gorm.io/gorm v1.31.2
+)
+
+require (
 	github.com/andybalholm/brotli v1.2.1 // indirect
 	github.com/dunglas/httpsfv v1.1.0 // indirect
-	github.com/gofiber/fiber/v2 v2.52.13 // indirect
-	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.6.1 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
@@ -16,7 +25,6 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.18.6 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -34,13 +42,8 @@ require (
 	github.com/zishang520/socket.io/parsers/engine/v3 v3.0.4 // indirect
 	github.com/zishang520/socket.io/parsers/socket/v3 v3.0.4 // indirect
 	github.com/zishang520/socket.io/servers/engine/v3 v3.0.4 // indirect
-	github.com/zishang520/socket.io/servers/socket/v3 v3.0.4 // indirect
-	github.com/zishang520/socket.io/v3 v3.0.4 // indirect
-	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
-	gorm.io/driver/postgres v1.6.0 // indirect
-	gorm.io/gorm v1.31.2 // indirect
 )
